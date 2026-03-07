@@ -994,15 +994,16 @@ var SOURCE_GROUP = 'topics';           // Biomass Prep & Ultrasound
 var DEST_GROUP = 'group_title';        // Pre-Decanter
 
 var OPERATORS = {
-  'QL01': 'Quinton L',
-  'JR01': 'Jaime R',
-  'JL01': 'James L',
-  'JD01': 'Jaime D',
-  'JD02': 'J.D.',
-  'SL01': 'Sly',
-  'MH01': 'Moh',
-  'JM01': 'Joshua',
-  'KD01': 'Kevin D.'
+  '5150': 'Bobby',
+  '0419': 'Laker',
+  '0420': 'Q',
+  '4093': 'George',
+  '2008': 'Jaime',
+  '8818': 'Cris',
+  '7117': 'FernDawg',
+  '0001': 'KD',
+  '1234': 'Moh',
+  '4444': 'Zee'
 };
 
 /* ===========================
@@ -1312,7 +1313,7 @@ function closeModal() {
 function handleLogin() {
   var input = document.getElementById('operator-code');
   var errorEl = document.getElementById('login-error');
-  var code = input.value.trim().toUpperCase();
+  var code = input.value.trim();
 
   if (OPERATORS[code]) {
     errorEl.classList.remove('visible');
@@ -1369,7 +1370,7 @@ function showToast(msg) {
 }
 
 function getInitials(name) {
-  return name.split(' ').map(function(p) { return p[0]; }).join('').toUpperCase();
+  return name.split(' ').map(function(p) { return p[0]; }).join('');
 }
 
 function formatDateISO(date) {
