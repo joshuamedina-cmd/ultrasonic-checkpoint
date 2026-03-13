@@ -870,7 +870,7 @@ table { border-collapse: collapse; width: 100%; }
   <!-- ===========================
        SCREEN 1: LOGIN
        =========================== -->
-  <div class="screen active" id="screen-login">
+  <div class="screen" id="screen-login" style="display:none!important">
 
     <div class="page-header">
       <h1>Ultrasonic Checkpoint</h1>
@@ -908,7 +908,7 @@ table { border-collapse: collapse; width: 100%; }
   <!-- ===========================
        SCREEN 2: MAIN APP
        =========================== -->
-  <div class="screen" id="screen-main">
+  <div class="screen active" id="screen-main">
 
     <div class="page-header">
       <h1>Ultrasonic Checkpoint</h1>
@@ -1349,14 +1349,8 @@ function handleLogin() {
 }
 
 function handleLogout() {
-  state.currentOperator = null;
-  state.currentCode = null;
-  state.batches = [];
-  state.sessionLogs = [];
-  state.pushing = false;
-  showScreen('screen-login');
-  document.getElementById('operator-code').focus();
-}
+    window.location.href = 'https://kmjz-master-hub.vercel.app';
+  }
 
 /* ===========================
    HELPERS
@@ -1437,6 +1431,34 @@ document.getElementById('modal-confirm').addEventListener('click', function(e) {
 });
 
 document.getElementById('operator-code').focus();
+</script>
+
+<script>
+// === AUTO-SET OPERATOR FROM LOCALSTORAGE (no code wall) ===
+(function() {
+  var name = null;
+  try { name = localStorage.getItem('kmjz_operator_name'); } catch(e) {}
+  if (name && typeof state !== 'undefined' && state) {
+    state.currentOperator = name;
+    if (typeof state.currentCode !== 'undefined') {
+      try { state.currentCode = localStorage.getItem('kmjz_operator_code') || ''; } catch(e) {}
+    }
+  } else if (name) {
+    if (typeof currentOperator !== 'undefined') {
+      currentOperator = name;
+    }
+    window._autoOperator = name;
+  }
+  // Update operator badge if exists
+  var badge = document.getElementById('operatorName') || document.getElementById('operatorBadge');
+  if (badge && name) badge.textContent = name;
+  // Update any operator display elements
+  document.querySelectorAll('[id*="perator"]').forEach(function(el) {
+    if (el.tagName === 'SPAN' && el.id.toLowerCase().includes('name') && name) {
+      el.textContent = name;
+    }
+  });
+})();
 </script>
 </body>
 </html>
