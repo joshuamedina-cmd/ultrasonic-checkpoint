@@ -880,22 +880,33 @@ table { border-collapse: collapse; width: 100%; }
     <div class="card">
       <div class="login-card">
         <h2>Operator Login</h2>
-        <p class="login-hint">Enter your 4-character operator code</p>
+        <p class="login-hint">Select your name</p>
         <div class="login-input-wrap">
-          <input
-            type="text"
-            id="operator-code"
-            class="operator-input"
-            placeholder="0000"
-            maxlength="4"
-            autocomplete="off"
-            autocapitalize="characters"
-            spellcheck="false"
-            inputmode="numeric"
-            pattern="[0-9]*"
-          >
-          <div class="error-msg" id="login-error">Invalid operator code</div>
-          <p class="login-hint-text">Type your code — login triggers automatically</p>
+          <select id="operatorSelect" class="operator-input" style="appearance:auto;-webkit-appearance:menulist;padding:10px;font-size:1rem;width:100%;">
+            <option value="">-- Choose Operator --</option>
+            <option value="Arturo">Arturo</option>
+            <option value="Bobby">Bobby</option>
+            <option value="Cris">Cris</option>
+            <option value="Dylan S">Dylan S</option>
+            <option value="Eli">Eli</option>
+            <option value="FernDawg">FernDawg</option>
+            <option value="Frank">Frank</option>
+            <option value="George">George</option>
+            <option value="George T">George T</option>
+            <option value="Jaime D">Jaime D</option>
+            <option value="Jaime P">Jaime P</option>
+            <option value="JDub">JDub</option>
+            <option value="Jeremy">Jeremy</option>
+            <option value="Josh">Josh</option>
+            <option value="KD">KD</option>
+            <option value="Laker">Laker</option>
+            <option value="Moh">Moh</option>
+            <option value="Q">Q</option>
+            <option value="Quentin">Quentin</option>
+            <option value="Sly">Sly</option>
+            <option value="Zee">Zee</option>
+          </select>
+          <button onclick="handleDropdownLogin()" style="margin-top:10px;padding:12px;width:100%;font-size:1rem;font-weight:600;border:none;border-radius:8px;background:#2563eb;color:#fff;cursor:pointer;">Continue</button>
         </div>
       </div>
     </div>
@@ -995,29 +1006,6 @@ var BOARD_ID = '18402821844';
 var SOURCE_GROUP = 'topics';           // Biomass Prep & Ultrasound
 var DEST_GROUP = 'group_title';        // Pre-Decanter
 
-var OPERATORS = {
-  '4821': 'Josh',
-  '0420': 'Q',
-  '1911': 'Jaime D',
-  '4093': 'George',
-  '5150': 'Bobby',
-  '2008': 'Jaime P',
-  '6239': 'Sly',
-  '4444': 'Zee',
-  '3979': 'Dylan S',
-  '9034': 'JDub',
-  '8818': 'Cris',
-  '5463': 'Arturo',
-  '3847': 'Eli',
-  '0419': 'Laker',
-  '7117': 'FernDawg',
-  '0001': 'KD',
-  '1234': 'Moh',
-  '2691': 'Quentin',
-  '8305': 'George T',
-  '4629': 'Frank',
-  '0301': 'Jeremy'
-};
 
 /* ===========================
    STATE
@@ -1323,29 +1311,18 @@ function closeModal() {
 /* ===========================
    AUTH
    =========================== */
-function handleLogin() {
-  var input = document.getElementById('operator-code');
-  var errorEl = document.getElementById('login-error');
-  var code = input.value.trim();
+function handleDropdownLogin() {
+  var sel = document.getElementById('operatorSelect');
+  var name = sel.value;
+  if (!name) return;
+  state.currentOperator = name;
+  state.currentCode = '';
 
-  if (OPERATORS[code]) {
-    errorEl.classList.remove('visible');
-    state.currentOperator = OPERATORS[code];
-    state.currentCode = code;
+  document.getElementById('operator-name-display').textContent = state.currentOperator;
+  document.getElementById('operator-initials').textContent = getInitials(state.currentOperator);
 
-    document.getElementById('operator-name-display').textContent = state.currentOperator;
-    document.getElementById('operator-initials').textContent = getInitials(state.currentOperator);
-
-    showScreen('screen-main');
-    loadBatches();
-    input.value = '';
-  } else {
-    errorEl.classList.remove('visible');
-    void errorEl.offsetWidth;
-    errorEl.classList.add('visible');
-    input.value = '';
-    input.focus();
-  }
+  showScreen('screen-main');
+  loadBatches();
 }
 
 function handleLogout() {
@@ -1415,22 +1392,11 @@ function escapeHtml(str) {
 /* ===========================
    EVENT LISTENERS
    =========================== */
-document.getElementById('operator-code').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') handleLogin();
-});
-
-// Auto-login on 4-char input
-document.getElementById('operator-code').addEventListener('input', function() {
-  if (this.value.length === 4) handleLogin();
-});
-
 document.getElementById('logout-btn').addEventListener('click', handleLogout);
 
 document.getElementById('modal-confirm').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
-
-document.getElementById('operator-code').focus();
 </script>
 
 <script>
